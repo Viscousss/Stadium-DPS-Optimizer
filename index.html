@@ -73,35 +73,45 @@
             let cash = parseInt(document.getElementById("cashInput").value);
             let character = document.getElementById("characterSelect").value;
             let availableItems = [...characters[character]];
-            let selectedItems = [];
-            let totalDPS = 140;
-            let usedCash = 0;
-            document.getElementById("result").innerText = "";
+            let bestCombo = [];
+            let bestDPS = 140;
 
-            availableItems.sort((a, b) => b.dps - a.dps);
-
-            for (let i = 0; i < 6; i++) {
-                let bestItem = null;
-                for (let item of availableItems) {
-                    if (item.cost + usedCash <= cash) {
-                        bestItem = item;
-                        break;
+            function getAllCombos(arr) {
+                let results = [];
+                const n = arr.length;
+                for (let i = 1; i < (1 << n); i++) {
+                    let combo = [];
+                    for (let j = 0; j < n; j++) {
+                        if (i & (1 << j)) {
+                            combo.push(arr[j]);
+                        }
+                    }
+                    if (combo.length <= 6) {
+                        results.push(combo);
                     }
                 }
-                if (bestItem) {
-                    selectedItems.push(bestItem);
-                    usedCash += bestItem.cost;
-                    totalDPS += bestItem.dps;
-                    availableItems = availableItems.filter(item => item !== bestItem);
+                return results;
+            }
+
+            let combos = getAllCombos(availableItems);
+
+            for (let combo of combos) {
+                let totalCost = combo.reduce((sum, item) => sum + item.cost, 0);
+                if (totalCost <= cash) {
+                    let comboDPS = 140 + combo.reduce((sum, item) => sum + item.dps, 0);
+                    if (comboDPS > bestDPS) {
+                        bestDPS = comboDPS;
+                        bestCombo = combo;
+                    }
                 }
             }
 
             let resultText = "Buy:\n";
-            for (let item of selectedItems) {
+            for (let item of bestCombo) {
                 resultText += `- ${item.name} (${item.cost} cash, +${item.dps} DPS)\n`;
             }
-            resultText += `\nTotal DPS gain: +${(totalDPS - 140).toFixed(1)}\n`;
-            resultText += `New Sustained DPS: ${totalDPS.toFixed(1)}\n`;
+            resultText += `\nTotal DPS gain: +${(bestDPS - 140).toFixed(1)}\n`;
+            resultText += `New Sustained DPS: ${bestDPS.toFixed(1)}\n`;
 
             document.getElementById("result").innerText = resultText;
         }
