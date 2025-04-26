@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stadium DPS Optimizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        input, button, select {
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stadium DPS Optimizer</h1>
+    <p>Select your character:</p>
+    <select id="characterSelect">
+        <option value="cassidy">Cassidy</option>
+    </select>
+    <p>Enter your cash amount:</p>
+    <input type="number" id="cashInput" placeholder="Enter cash" />
+    <button onclick="optimizeDPS()">Optimize</button>
+    <h2>Result:</h2>
+    <pre id="result"></pre>
+
+    <script>
+        const characters = {
+            cassidy: [
+                { name: "Eye of the Spider", cost: 13500, dps: 36 },
+                { name: "The Closer", cost: 13000, dps: 28 },
+                { name: "Booster Jets", cost: 11000, dps: 28 },
+                { name: "Weapon Jammer", cost: 10000, dps: 29 },
+                { name: "Talon Mod Module", cost: 5500, dps: 22 },
+                { name: "Codebreaker", cost: 9000, dps: 22 },
+                { name: "Icy Coolant", cost: 5000, dps: 14 },
+                { name: "Stockpile", cost: 4000, dps: 9 },
+                { name: "Shieldbuster", cost: 4000, dps: 30 },
+                { name: "Aftermarket Firing Pin", cost: 3750, dps: 14 },
+                { name: "Salvaged Slugs", cost: 9500, dps: 14 },
+                { name: "Volskaya Ordnance", cost: 9500, dps: 14 },
+                { name: "Commander's Clip", cost: 10000, dps: 14 },
+                { name: "Compensator", cost: 1000, dps: 8 },
+                { name: "Weapon Grease", cost: 1000, dps: 7 },
+                { name: "Ammo Reserves", cost: 1500, dps: 6.7 },
+                { name: "Technoleech", cost: 4500, dps: 8 },
+                { name: "El-Sa'Ka Suppressor", cost: 11000, dps: 14 },
+                { name: "Hardlight Accelerator", cost: 11000, dps: 14 }
+            ]
+        };
+
+        function optimizeDPS() {
+            let cash = parseInt(document.getElementById("cashInput").value);
+            let character = document.getElementById("characterSelect").value;
+            let availableItems = [...characters[character]];
+            let selectedItems = [];
+            let totalDPS = 140;
+            let usedCash = 0;
+            document.getElementById("result").innerText = "";
+
+            availableItems.sort((a, b) => b.dps - a.dps);
+
+            for (let i = 0; i < 6; i++) {
+                let bestItem = null;
+                for (let item of availableItems) {
+                    if (item.cost + usedCash <= cash) {
+                        bestItem = item;
+                        break;
+                    }
+                }
+                if (bestItem) {
+                    selectedItems.push(bestItem);
+                    usedCash += bestItem.cost;
+                    totalDPS += bestItem.dps;
+                    availableItems = availableItems.filter(item => item !== bestItem);
+                }
+            }
+
+            let resultText = "Buy:\n";
+            for (let item of selectedItems) {
+                resultText += `- ${item.name} (${item.cost} cash, +${item.dps} DPS)\n`;
+            }
+            resultText += `\nTotal DPS gain: +${(totalDPS - 140).toFixed(1)}\n`;
+            resultText += `New Sustained DPS: ${totalDPS.toFixed(1)}\n`;
+
+            document.getElementById("result").innerText = resultText;
+        }
+    </script>
+</body>
+</html>
