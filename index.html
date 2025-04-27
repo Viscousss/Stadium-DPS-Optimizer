@@ -41,6 +41,25 @@
             color: #777;
             margin-top: 20px;
         }
+        #shopContainer {
+            position: relative;
+            margin-top: 30px;
+        }
+        #shopImage {
+            width: 100%;
+            max-width: 800px;
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #333;
+        }
+        #highlightCanvas {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -55,7 +74,12 @@
     <h2>Result:</h2>
     <pre id="result"></pre>
 
-    <div id="version">Version: Beta 0.8</div>
+    <div id="shopContainer">
+        <img id="shopImage" src="your_uploaded_image.png" alt="Shop Screenshot">
+        <canvas id="highlightCanvas"></canvas>
+    </div>
+
+    <div id="version">Version: Beta 0.9</div>
 
     <script>
         const characters = {
@@ -70,6 +94,7 @@
                 { name: "Technoleech", cost: 4500, dps: 7.9 },
                 { name: "Icy Coolant", cost: 5000, dps: 13.7 },
                 { name: "Talon Mod Module", cost: 5500, dps: 21.5 },
+                { name: "Quickload Chamber", cost: 4000, dps: 5.7 },
                 { name: "Codebreaker", cost: 9000, dps: 21.3 },
                 { name: "Salvaged Slugs", cost: 9500, dps: 13.4 },
                 { name: "Volskaya Ordnance", cost: 9500, dps: 13.3 },
@@ -81,6 +106,24 @@
                 { name: "The Closer", cost: 13000, dps: 27.8 },
                 { name: "Eye of the Spider", cost: 13500, dps: 36.2 }
             ]
+        };
+
+        const itemPositions = {
+            "Compensator": [50, 50],
+            "Weapon Grease": [150, 50],
+            "Ammo Reserves": [50, 150],
+            "Aftermarket Firing Pin": [300, 50],
+            "Shieldbuster": [400, 50],
+            "Stockpile": [300, 150],
+            "Technoleech": [400, 150],
+            "Icy Coolant": [500, 150],
+            "Talon Mod Module": [300, 250],
+            "Quickload Chamber": [400, 250],
+            "Commander's Clip": [550, 250],
+            "Weapon Jammer": [650, 250],
+            "Booster Jets": [550, 350],
+            "The Closer": [550, 450],
+            "Eye of the Spider": [650, 450]
         };
 
         function optimizeDPS() {
@@ -121,14 +164,40 @@
                 }
             }
 
-            let resultText = "Buy:\n";
+            let resultText = "Recommended Purchases:\n";
             for (let item of bestCombo) {
                 resultText += `- ${item.name} (${item.cost} cash, +${item.dps} DPS)\n`;
             }
             resultText += `\nTotal DPS gain: +${bestItemDPS.toFixed(1)}\n`;
             resultText += `New Sustained DPS: ${(baseDPS + bestItemDPS).toFixed(1)}\n`;
-
             document.getElementById("result").innerText = resultText;
+
+            drawHighlights(bestCombo.map(item => item.name));
+        }
+
+        function drawHighlights(itemNames) {
+            const canvas = document.getElementById("highlightCanvas");
+            const img = document.getElementById("shopImage");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = "#00BFFF";
+            ctx.lineWidth = 4;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "#00BFFF";
+            ctx.fillStyle = "rgba(0, 191, 255, 0.2)";
+
+            for (let name of itemNames) {
+                if (itemPositions[name]) {
+                    let [x, y] = itemPositions[name];
+                    ctx.beginPath();
+                    ctx.roundRect(x, y, 80, 80, 10);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+            }
         }
     </script>
 </body>
