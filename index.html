@@ -149,11 +149,17 @@
         }
         #mainContent {
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 50px;
-            flex-wrap: wrap;
+            justify-content: center;     /* center horizontally */
+            align-items: stretch;        /* make children match height */
+            gap: 50px;                   /* space between panels */
             margin-top: 30px;
+            flex-wrap: wrap;             /* for narrow windows, stack vertically */
+        }
+
+        #numpadContainer,
+        #shopContainer {
+                                          /* ensure both panels fill the same height */
+            flex-shrink: 0;              /* don’t let them shrink */
         }
     </style>
 </head>
