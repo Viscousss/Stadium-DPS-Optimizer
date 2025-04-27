@@ -47,25 +47,26 @@
     <script>
         const characters = {
             cassidy: [
-                { name: "Eye of the Spider", cost: 13500, dps: 36 },
-                { name: "The Closer", cost: 13000, dps: 28 },
-                { name: "Booster Jets", cost: 11000, dps: 28 },
-                { name: "Weapon Jammer", cost: 10000, dps: 29 },
-                { name: "Talon Mod Module", cost: 5500, dps: 22 },
-                { name: "Codebreaker", cost: 9000, dps: 22 },
-                { name: "Icy Coolant", cost: 5000, dps: 14 },
-                { name: "Stockpile", cost: 4000, dps: 9 },
-                { name: "Shieldbuster", cost: 4000, dps: 30 },
-                { name: "Aftermarket Firing Pin", cost: 3750, dps: 14 },
-                { name: "Salvaged Slugs", cost: 9500, dps: 14 },
-                { name: "Volskaya Ordnance", cost: 9500, dps: 14 },
-                { name: "Commander's Clip", cost: 10000, dps: 14 },
-                { name: "Compensator", cost: 1000, dps: 8 },
-                { name: "Weapon Grease", cost: 1000, dps: 7 },
-                { name: "Ammo Reserves", cost: 1500, dps: 6.7 },
-                { name: "Technoleech", cost: 4500, dps: 8 },
-                { name: "El-Sa'Ka Suppressor", cost: 11000, dps: 14 },
-                { name: "Hardlight Accelerator", cost: 11000, dps: 14 }
+                { name: "Compensator", cost: 1000, dps: 7.9 },
+                { name: "Weapon Grease", cost: 1000, dps: 6.9 },
+                { name: "Ammo Reserves", cost: 1500, dps: 7.0 },
+                { name: "Frenzy Amplifier", cost: 1500, dps: 0 },
+                { name: "Aftermarket Firing Pin", cost: 3750, dps: 13.8 },
+                { name: "Shieldbuster", cost: 4000, dps: 30.4 },
+                { name: "Stockpile", cost: 4000, dps: 11.5 },
+                { name: "Technoleech", cost: 4500, dps: 7.9 },
+                { name: "Icy Coolant", cost: 5000, dps: 13.7 },
+                { name: "Talon Mod Module", cost: 5500, dps: 21.5 },
+                { name: "Codebreaker", cost: 9000, dps: 21.3 },
+                { name: "Salvaged Slugs", cost: 9500, dps: 13.4 },
+                { name: "Volskaya Ordnance", cost: 9500, dps: 13.3 },
+                { name: "Weapon Jammer", cost: 10000, dps: 28.7 },
+                { name: "Commander's Clip", cost: 10000, dps: 13.2 },
+                { name: "Booster Jets", cost: 11000, dps: 27.5 },
+                { name: "El-Sa'Ka Suppressor", cost: 11000, dps: 13.1 },
+                { name: "Hardlight Accelerator", cost: 11000, dps: 13.0 },
+                { name: "The Closer", cost: 13000, dps: 27.8 },
+                { name: "Eye of the Spider", cost: 13500, dps: 36.2 }
             ]
         };
 
@@ -74,7 +75,7 @@
             let character = document.getElementById("characterSelect").value;
             let availableItems = [...characters[character]];
             let bestCombo = [];
-            let bestDPS = 140;
+            let bestDPS = 93.33;
 
             function getAllCombos(arr) {
                 let results = [];
@@ -98,7 +99,7 @@
             for (let combo of combos) {
                 let totalCost = combo.reduce((sum, item) => sum + item.cost, 0);
                 if (totalCost <= cash) {
-                    let comboDPS = 140 + combo.reduce((sum, item) => sum + item.dps, 0);
+                    let comboDPS = 93.33 + combo.reduce((sum, item) => sum + item.dps, 0);
                     if (comboDPS > bestDPS) {
                         bestDPS = comboDPS;
                         bestCombo = combo;
@@ -110,7 +111,7 @@
             for (let item of bestCombo) {
                 resultText += `- ${item.name} (${item.cost} cash, +${item.dps} DPS)\n`;
             }
-            resultText += `\nTotal DPS gain: +${(bestDPS - 140).toFixed(1)}\n`;
+            resultText += `\nTotal DPS gain: +${(bestDPS - 93.33).toFixed(1)}\n`;
             resultText += `New Sustained DPS: ${bestDPS.toFixed(1)}\n`;
 
             document.getElementById("result").innerText = resultText;
