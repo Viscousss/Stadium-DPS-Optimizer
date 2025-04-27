@@ -75,7 +75,8 @@
             let character = document.getElementById("characterSelect").value;
             let availableItems = [...characters[character]];
             let bestCombo = [];
-            let bestDPS = 93.33;
+            let baseDPS = 93.33;
+            let bestItemDPS = 0;
 
             function getAllCombos(arr) {
                 let results = [];
@@ -99,9 +100,9 @@
             for (let combo of combos) {
                 let totalCost = combo.reduce((sum, item) => sum + item.cost, 0);
                 if (totalCost <= cash) {
-                    let comboDPS = 93.33 + combo.reduce((sum, item) => sum + item.dps, 0);
-                    if (comboDPS > bestDPS) {
-                        bestDPS = comboDPS;
+                    let comboItemDPS = combo.reduce((sum, item) => sum + item.dps, 0);
+                    if ((baseDPS + comboItemDPS) > (baseDPS + bestItemDPS)) {
+                        bestItemDPS = comboItemDPS;
                         bestCombo = combo;
                     }
                 }
@@ -111,8 +112,8 @@
             for (let item of bestCombo) {
                 resultText += `- ${item.name} (${item.cost} cash, +${item.dps} DPS)\n`;
             }
-            resultText += `\nTotal DPS gain: +${(bestDPS - 93.33).toFixed(1)}\n`;
-            resultText += `New Sustained DPS: ${bestDPS.toFixed(1)}\n`;
+            resultText += `\nTotal DPS gain: +${bestItemDPS.toFixed(1)}\n`;
+            resultText += `New Sustained DPS: ${(baseDPS + bestItemDPS).toFixed(1)}\n`;
 
             document.getElementById("result").innerText = resultText;
         }
