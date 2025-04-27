@@ -13,12 +13,20 @@
             text-align: center;
         }
         header {
-            background: linear-gradient(90deg, #ff8c00, #ff0080);
-            padding: 20px;
-            font-size: 32px;
-            font-weight: bold;
-            color: white;
-            letter-spacing: 1px;
+            background: url('your_stadium_logo.png') center/contain no-repeat;
+            height: 120px;
+            margin-bottom: 30px;
+            background-color: transparent;
+            animation: headerGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes headerGlow {
+            0% {
+            filter: drop-shadow(0 0 5px #8ca0cc);
+            }
+            100% {
+            filter: drop-shadow(0 0 15px #a0b5e8);
+            }
         }
         #shopContainer {
             margin: 40px auto;
